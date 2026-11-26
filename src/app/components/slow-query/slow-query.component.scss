@@ -1,0 +1,17 @@
+// The statement as it was written, wrapped, with the copy button kept inside the dialog
+.statement {
+  display: inline-block;
+  max-width: calc(100% - 45px);
+
+  pre {
+    margin: 0;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+.value {
+  font-family: monospace;
+  word-break: break-all;
+}

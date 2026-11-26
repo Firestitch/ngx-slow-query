@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+@use '@firestitch/style/styles' as fs-style;
+@import '@firestitch/component-tools/assets/playground.scss';
+
+@include fs-style.core();
+@include mat.core();

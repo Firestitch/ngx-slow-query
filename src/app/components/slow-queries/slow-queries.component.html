@@ -1,0 +1,48 @@
+<fs-list [config]="listConfig">
+  <fs-list-column name="query" title="Statement" [sortable]="false">
+    <ng-template fs-list-cell let-row="row">
+      <a class="statement" [routerLink]="[row.id]">{{ row.query }}</a>
+      <div class="small">{{ row.source }}</div>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="sourceType" title="Ran by" [sortable]="false">
+    <ng-template fs-list-cell let-row="row">
+      @let sourceType = SlowQuerySourceTypes[row.sourceType];
+      <fs-chip
+          size="small"
+          [backgroundColor]="sourceType?.background">
+        {{ sourceType?.name ?? row.sourceType }}
+      </fs-chip>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="seenDate" title="Day (UTC)" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.seenDate | fsDateFormat: 'date' }}
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="count" title="Runs" align="right" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.count | number }}
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="totalDuration" title="Total" align="right" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.totalDuration | number: '1.2-2' }} s
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="averageDuration" title="Average" align="right" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.averageDuration | number: '1.2-2' }} s
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="maxDuration" title="Slowest" align="right" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{ row.maxDuration | number: '1.2-2' }} s
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="modifyDate" title="Last ran slow" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      <fs-date-ago [date]="row.modifyDate"></fs-date-ago>
+    </ng-template>
+  </fs-list-column>
+</fs-list>

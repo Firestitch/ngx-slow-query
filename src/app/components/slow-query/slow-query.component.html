@@ -1,0 +1,115 @@
+<fs-dialog>
+  <fs-dialog-title>
+    Slow Query
+    <ng-template fsDialogSubtitle>
+      @if (slowQuery(); as slowQuery) {
+        {{ slowQuery.source }} &middot; #{{ slowQuery.id }}
+      }
+    </ng-template>
+  </fs-dialog-title>
+  <mat-dialog-content>
+    <ng-container *fsSkeleton="slowQuery()">
+      @if (slowQuery(); as slowQuery) {
+        <h2>Statement</h2>
+        <fs-clipboard-text
+            class="statement"
+            [content]="slowQuery.query"
+            tooltip="Copy statement">
+          <pre>{{ slowQuery.query }}</pre>
+        </fs-clipboard-text>
+        <div class="small">Every value is replaced by ?, and a list of them by (?+). The values of its latest run are below.</div>
+
+        <h2>Runs on {{ slowQuery.seenDate | fsDateFormat: 'date' }} (UTC)</h2>
+        <div class="fs-row.column-gap-lg.align-start.wrap">
+          <fs-label-field>
+            <fs-label>Ran slow</fs-label>
+            {{ slowQuery.count | number }} {{ slowQuery.count === 1 ? 'time' : 'times' }}
+          </fs-label-field>
+          <fs-label-field>
+            <fs-label>Total</fs-label>
+            {{ slowQuery.totalDuration | number: '1.2-4' }} s
+          </fs-label-field>
+          <fs-label-field>
+            <fs-label>Average</fs-label>
+            {{ slowQuery.averageDuration | number: '1.2-4' }} s
+          </fs-label-field>
+          <fs-label-field>
+            <fs-label>Slowest</fs-label>
+            {{ slowQuery.maxDuration | number: '1.2-4' }} s
+          </fs-label-field>
+          <fs-label-field>
+            <fs-label>First ran slow</fs-label>
+            {{ slowQuery.createDate | fsDateFormat: 'date-time' }}
+          </fs-label-field>
+          <fs-label-field>
+            <fs-label>Last ran slow</fs-label>
+            {{ slowQuery.modifyDate | fsDateFormat: 'date-time' }}
+          </fs-label-field>
+        </div>
+
+        <h2>What ran it</h2>
+        <fs-label-field>
+          <fs-label>Ran by</fs-label>
+          <fs-chip
+              size="small"
+              [backgroundColor]="sourceType()?.background">
+            {{ sourceType()?.name ?? slowQuery.sourceType }}
+          </fs-chip>
+        </fs-label-field>
+        <fs-label-field>
+          <fs-label>Source</fs-label>
+          <fs-clipboard-text tooltip="Copy source">{{ slowQuery.source }}</fs-clipboard-text>
+        </fs-label-field>
+        @if (slowQuery.path) {
+          <fs-label-field>
+            <fs-label>Request path</fs-label>
+            <fs-clipboard-text tooltip="Copy path">{{ slowQuery.path }}</fs-clipboard-text>
+            <fs-label-message>Of the latest request it ran slow in, without its query string</fs-label-message>
+          </fs-label-field>
+        }
+        @if (slowQuery.caller) {
+          <fs-label-field>
+            <fs-label>Caller</fs-label>
+            <fs-clipboard-text tooltip="Copy caller">{{ slowQuery.caller }}</fs-clipboard-text>
+            <fs-label-message>The file and line that ran it, the latest time</fs-label-message>
+          </fs-label-field>
+        }
+
+        <h2>Values of its latest run</h2>
+        <div class="small">In the order the statement takes them, each with the column it was compared with or written to. A sensitive column's value, and one whose column cannot be told, is redacted.</div>
+        <fs-list [config]="parametersListConfig">
+          <fs-list-column name="position" title="#" align="right">
+            <ng-template fs-list-cell let-row="row">
+              {{ row.position }}
+            </ng-template>
+          </fs-list-column>
+          <fs-list-column name="column" title="Column">
+            <ng-template fs-list-cell let-row="row">
+              {{ row.column ?? 'Not known' }}
+            </ng-template>
+          </fs-list-column>
+          <fs-list-column name="value" title="Value">
+            <ng-template fs-list-cell let-row="row">
+              <span class="value">{{ row.value }}</span>
+            </ng-template>
+          </fs-list-column>
+        </fs-list>
+
+        <fs-label-field>
+          <fs-label>Hash</fs-label>
+          <fs-clipboard-text tooltip="Copy hash">{{ slowQuery.hash }}</fs-clipboard-text>
+          <fs-label-message>The statement and what ran it, hashed: the runs this row counts. Row slow_queries {{ slowQuery.id }}</fs-label-message>
+        </fs-label-field>
+      }
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+        mat-button
+        color="primary"
+        type="button"
+        [mat-dialog-close]="null">
+      Close
+    </button>
+  </mat-dialog-actions>
+</fs-dialog>

@@ -1,0 +1,10 @@
+// A statement runs long: two lines of it, in the font it was written in, the rest in the dialog
+.statement {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 600px;
+  font-family: monospace;
+  word-break: break-all;
+}
