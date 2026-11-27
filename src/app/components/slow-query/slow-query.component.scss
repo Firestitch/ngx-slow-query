@@ -1,13 +1,17 @@
-// The statement as it was written, wrapped, with the copy button kept inside the dialog
+// The statement as the read lays it out, a clause to a line, with the copy
+// button kept inside the dialog. A long one scrolls in its own box, so the runs
+// and values below it stay in reach.
 .statement {
   display: inline-block;
   max-width: calc(100% - 45px);
 
   pre {
     margin: 0;
+    max-height: 50vh;
+    overflow: auto;
     font-family: monospace;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: break-word;
   }
 }
 

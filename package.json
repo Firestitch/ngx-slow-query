@@ -2,7 +2,7 @@
   "name": "@firestitch/slow-query",
   "title": "Slow Query",
   "description": "Screens for the framework's slow query log: a list of the queries that ran slow, filtered and sorted, and a dialog with everything kept of one.",
-  "version": "18.0.1",
+  "version": "18.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-slow-query"
